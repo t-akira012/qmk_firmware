@@ -28,7 +28,7 @@ enum custom_keycodes {
   LOWER,
   RAISE,
   ADJUST,
-  KC_L1_E,
+  KC_L1_ENT,
   KC_L1_HOLD,
 };
 
@@ -51,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_Q,           KC_W, KC_E,   KC_R,            KC_T,             KC_Y,            KC_U,            KC_I,    KC_O,    KC_P,
       LT(1,KC_A),     KC_S, KC_D,   KC_F,            KC_G,             KC_H,            KC_J,            KC_K,    KC_L,    KC_SCLN,
       LSFT_T(KC_Z),   KC_X, KC_C,   KC_V,            KC_B,             KC_N,            KC_M,            KC_COMM, KC_DOT,  LT(2, KC_SLSH),
-                            KC_ESC, LGUI_T(KC_LNG2), LCTL_T(KC_SPC),   LSFT_T(KC_ENT),  KC_L1_HOLD,      KC_SLSH
+                            KC_TAB, LGUI_T(KC_ESC),  LCTL_T(KC_SPC),   KC_L1_ENT,      LSFT_T(KC_ENT),  KC_SLSH
 ),
 
 /* Raise
@@ -132,7 +132,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-      case KC_L1_E:
+      case KC_L1_ENT:
       if(record->event.pressed) {
           tap_code(KC_LANG1);
       } else {
