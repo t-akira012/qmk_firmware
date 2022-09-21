@@ -29,6 +29,7 @@ enum custom_keycodes {
   RAISE,
   ADJUST,
   KC_L1_E,
+  KC_L1_HOLD,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -46,10 +47,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *               `--------------------'           `--------------------'
  */
 [_QWERTY] = LAYOUT_split_3x5_3(
-      KC_Q,       KC_W, KC_E,  KC_R,            KC_T,             KC_Y,           KC_U,            KC_I,    KC_O,    KC_P,
-      KC_A,       KC_S, KC_D,  KC_F,            KC_G,             KC_H,           KC_J,            KC_K,    KC_L,    KC_SCLN,
-      LT(2,KC_Z), KC_X, KC_C,  KC_V,            KC_B,             KC_N,           KC_M,            KC_COMM, KC_DOT,  LT(1,KC_SLSH),
-                        KC_NO, LGUI_T(KC_LNG2), LCTL_T(KC_SPC),   LSFT_T(KC_ENT), LALT_T(KC_L1_E), KC_NO
+      KC_Q,         KC_W, KC_E,  KC_R,            KC_T,             KC_Y,            KC_U,            KC_I,    KC_O,    KC_P,
+      LSFT_T(KC_A), KC_S, KC_D,  KC_F,            KC_G,             KC_H,            KC_J,            KC_K,    KC_L,    LSFT_T(KC_SCLN),
+      LT(1,KC_Z),   KC_X, KC_C,  KC_V,            KC_B,             KC_N,            KC_M,            KC_COMM, KC_DOT,  LT(2,KC_SLSH),
+                          KC_NO, LGUI_T(KC_LNG2), LCTL_T(KC_SPC),   KC_ENT,          KC_L1_HOLD,      KC_NO
 ),
 
 /* Raise
@@ -57,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,----------------------------------.           ,----------------------------------.
  * |   !  |   @  |   #  |   $  |   %  |           |   ^  |   &  |   *  |   (  |   )  |
  * |------+------+------+------+------|           |------+------+------+------+------|
- * |  Tab |   _  |   +  |  |   |  ~   |           |   :  |     |   >  |   {  |   }  |
+ * |  Tab |   _  |   +  |  |   |  ~   |           |   :  |      |   >  |   {  |   }  |
  * |------+------+------+------+------|           |------+------+------+------+------|
  * |  Caps|   -  |   =  |  \   |  `   |           |   ;  |   '  |   <  |   [  |   ]  |
  * `-------------+------+------+------|           |------+------+------+------+------'
@@ -65,10 +66,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *               `--------------------'           `--------------------'
  */
 [_RAISE] = LAYOUT_split_3x5_3(
-      KC_1,    KC_2,    KC_3,    KC_4,    KC_5,          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
-      KC_GRV,  KC_LBRC, KC_RBRC, KC_LBRC, KC_RBRC,       KC_MINS, KC_PLUS, KC_DQUO, KC_QUOT, KC_COLN,
-      KC_NO,   KC_LPRN, KC_RPRN, KC_LT,   KC_GT,         KC_UNDS, KC_EQL,  KC_BSLS, KC_NO,   KC_NO,
-                        KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS, MO(3),   KC_TRNS
+      KC_1,           KC_2,    KC_3,    KC_4,    KC_5,          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
+      LSFT_T(KC_GRV), KC_LBRC, KC_RBRC, KC_LBRC, KC_RBRC,       KC_MINS, KC_PLUS, KC_DQUO, KC_QUOT, LSFT_T(KC_COLN),
+      KC_NO,          KC_LPRN, KC_RPRN, KC_LT,   KC_GT,         KC_UNDS, KC_EQL,  KC_BSLS, KC_NO,   KC_NO,
+                               KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS, MO(3),   KC_TRNS
 ),
 
 /* Lower
@@ -113,6 +114,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+      case KC_L1_HOLD:
+      if(record->event.pressed) {
+          tap_code(KC_LANG1);
+      } else {
+          tap_code(KC_LANG2);
+      }
+      return false;
+      break;
       case KC_L1_E:
       if(record->event.pressed) {
           tap_code(KC_LANG1);
