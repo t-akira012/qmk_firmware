@@ -30,8 +30,8 @@ enum custom_keycodes {
   ADJUST,
   KC_L1_HOLD,
   NN_L2_GUI,
-  NN_M1_ESC,
   NN_ESC,
+  __ESC_L2_GUI,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -85,14 +85,20 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+static bool hold_esc = false;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case NN_M1_ESC:
+    case __ESC_L2_GUI:
       if (record->event.pressed) {
-        tap_code(KC_ESC);
-        layer_on(_LOWER);
+        hold_esc = true;
+        tap_code(KC_LANG2);
+        register_code(KC_LEFT_GUI);
       } else {
-        layer_off(_LOWER);
+        unregister_code(KC_LEFT_GUI);
+        if (hold_esc) {
+          tap_code(KC_ESC);
+        }
+        hold_esc = false;
       }
       return false;
       break;
@@ -154,6 +160,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_ADJUST);
       }
       return false;
+      break;
+    default:
+      hold_esc = false;
       break;
   }
   return true;
