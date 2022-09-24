@@ -31,7 +31,7 @@ enum custom_keycodes {
   KC_L1_HOLD,
   NN_L2_GUI,
   NN_ESC,
-  __ESC_L2_GUI,
+  NN_L2_ESC_GUI,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -65,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_ADJUST] =  LAYOUT_split_3x5_3(
   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,        KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
   KC_F11,  KC_F12,  _______, _______, _______,      _______, _______, _______, _______, _______,
-  QK_BOOT,   _______, _______, _______, _______,      KC_MPRV, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY,
+  KC_NO,   _______, _______, _______, _______,      KC_MPRV, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY,
                     _______, _______, _______,      _______,  _______, _______
 )
 };
@@ -88,7 +88,7 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
 static bool hold_esc = false;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case __ESC_L2_GUI:
+    case NN_L2_ESC_GUI:
       if (record->event.pressed) {
         hold_esc = true;
         tap_code(KC_LANG2);
