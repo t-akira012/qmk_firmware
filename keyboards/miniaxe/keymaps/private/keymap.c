@@ -32,16 +32,17 @@ enum custom_keycodes {
   NN_L2_GUI,
   NN_ESC,
   NN_L2_ESC_GUI,
+  NN_LANG1,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty */
 [_QWERTY] = LAYOUT_split_3x5_3(
-      KC_Q,           KC_W, KC_E,            KC_R,        KC_T,             KC_Y,            KC_U,             KC_I,    KC_O,    KC_P,
-      LCTL_T(KC_A),   KC_S, KC_D,            KC_F,        KC_G,             KC_H,            KC_J,             KC_K,    KC_L,    KC_SCLN,
-      LSFT_T(KC_Z),   KC_X, KC_C,            KC_V,        KC_B,             KC_N,            KC_M,             KC_COMM, KC_DOT,  LT(2, KC_SLSH),
-                            NN_ESC,          NN_L2_GUI,   LCTL_T(KC_SPC),   LSFT_T(KC_ENT),  LALT_T(KC_LANG1), LT(3,KC_TAB)
+      KC_Q,           KC_W,         KC_E,          KC_R,            KC_T,             KC_Y,            KC_U,       KC_I,    KC_O,    KC_P,
+      LCTL_T(KC_A),   KC_S,         KC_D,          KC_F,            KC_G,             KC_H,            KC_J,       KC_K,    KC_L,    KC_SCLN,
+      LSFT_T(KC_Z),   LALT_T(KC_X), KC_C,          KC_V,            KC_B,             KC_N,            KC_M,       KC_COMM, KC_DOT,  LT(2, KC_SLSH),
+                                    LT(1,KC_TAB),  NN_L2_ESC_GUI,   LCTL_T(KC_SPC),   LSFT_T(KC_ENT),  NN_LANG1,   LT(3,KC_TAB)
 ),
 
 /* Raise */
@@ -86,8 +87,16 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
 }
 
 static bool hold_esc = false;
+static bool lang1_on = false;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case NN_LANG1:
+      if (record->event.pressed) {
+        tap_code(KC_LANG1);
+        lang1_on = true;
+      }
+      return false;
+      break;
     case NN_L2_ESC_GUI:
       if (record->event.pressed) {
         hold_esc = true;
@@ -95,10 +104,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         register_code(KC_LEFT_GUI);
       } else {
         unregister_code(KC_LEFT_GUI);
-        if (hold_esc) {
+        if (!lang1_on && hold_esc) {
           tap_code(KC_ESC);
         }
         hold_esc = false;
+        lang1_on = false;
       }
       return false;
       break;
@@ -167,3 +177,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+
+// #include "planck.h"
+// 
+// #ifdef SWAP_HANDS_ENABLE
+// __attribute__ ((weak))
+// const keypos_t PROGMEM hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
+//     {{11, 0}, {10, 0}, {9, 0}, {8, 0}, {7, 0}, {6, 0}, {5, 0}, {4, 0}, {3, 0}, {2, 0}, {1, 0}, {0, 0}},
+//     {{11, 1}, {10, 1}, {9, 1}, {8, 1}, {7, 1}, {6, 1}, {5, 1}, {4, 1}, {3, 1}, {2, 1}, {1, 1}, {0, 1}},
+//     {{11, 2}, {10, 2}, {9, 2}, {8, 2}, {7, 2}, {6, 2}, {5, 2}, {4, 2}, {3, 2}, {2, 2}, {1, 2}, {0, 2}},
+//     {{11, 3}, {10, 3}, {9, 3}, {8, 3}, {7, 3}, {6, 3}, {5, 3}, {4, 3}, {3, 3}, {2, 3}, {1, 3}, {0, 3}},
+// };
+// 
+// #    ifdef ENCODER_MAP_ENABLE
+// const uint8_t PROGMEM encoder_hand_swap_config[NUM_ENCODERS] = {0};
+// #    endif
+// #endif
