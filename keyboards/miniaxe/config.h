@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* private option */
 #define IGNORE_MOD_TAP_INTERRUPT_PER_KEY
 #define TAPPING_TERM 200
-// #define RETRO_TAPPING
+#define RETRO_TAPPING
 // #define PERMISSIVE_HOLD
 
 /* key matrix size */
