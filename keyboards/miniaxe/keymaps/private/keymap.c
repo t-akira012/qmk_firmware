@@ -40,6 +40,8 @@ enum custom_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
+// TODO: 記号系を1レイヤーにまとめてshiftの同時押下を不要にする
+
 /* Qwerty */
 [_QWERTY] = LAYOUT_split_3x5_3(
       KC_Q,           KC_W,          KC_E,            KC_R,            KC_T,               KC_Y,            KC_U,         KC_I,    KC_O,    KC_P,
@@ -49,25 +51,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 /* Lower */
+/*  1 2 3 4 5  6 7 8 9 0
+    ` ( ) { }  - = " ' :
+    ~ [ ] < >  _ + | \
+ */
 [_LOWER] = LAYOUT_split_3x5_3(
-      KC_TAB,  KC_LSFT, KC_UP,   KC_LGUI,     KC_LGUI,       KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-      KC_LCTL, KC_LEFT, KC_DOWN, KC_RGHT,     KC_NO,         KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-      KC_LSFT, KC_LALT, KC_NO,   KC_NO,       KC_NO,         KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-                        KC_TRNS, KC_TRNS,     KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS
+      KC_1,       KC_2,    KC_3,    KC_4,    KC_5,          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
+      KC_GRV,     KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR,       KC_MINS, KC_EQL,  KC_DQUO, KC_QUOT, KC_COLN,
+      KC_TILD,    KC_LBRC, KC_RBRC, KC_LT,   KC_GT,         KC_UNDS, KC_PLUS, KC_PIPE, KC_BSLS, KC_SLSH,
+                        KC_TRNS, KC_TRNS,    KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS
 ),
 
 /* Raise */
+/*  ! @ # $ %  ^ & * ? BS
+    ` ( ) { }  - = " ' :
+    ~ [ ] < >  _ + | \
+*/
 [_RAISE] = LAYOUT_split_3x5_3(
-      KC_1,       KC_2,    KC_3,    KC_4,    KC_5,          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
+      KC_EXLM,    KC_AT,   KC_HASH, KC_DLR,  KC_PERC,       KC_CIRC, KC_AMPR, KC_ASTR, KC_QUES, KC_BSPC,
       KC_GRV,     KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR,       KC_MINS, KC_EQL,  KC_DQUO, KC_QUOT, KC_COLN,
-      KC_LSFT,    KC_LBRC, KC_RBRC, KC_LT,   KC_GT,         KC_UNDS, KC_PLUS, KC_BSLS, KC_BSPC, KC_NO,
+      KC_TILD,    KC_LBRC, KC_RBRC, KC_LT,   KC_GT,         KC_UNDS, KC_PLUS, KC_PIPE, KC_BSLS, KC_NO,
                            KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS
 ),
 /* Adjust (Lower + Raise) */
 [_ADJUST] =  LAYOUT_split_3x5_3(
   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,        KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
-  KC_F11,  KC_F12,  _______, _______, _______,      _______, _______, _______, _______, _______,
-  KC_NO,   _______, _______, _______, _______,      KC_MPRV, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY,
+  KC_F11,  KC_F12,  _______, _______, _______,      _______, _______, _______, KC_UP,   _______,
+  KC_NO,   _______, _______, _______, _______,      KC_NO,   KC_NO,   KC_LEFT, KC_DOWN, KC_RGHT,
                     _______, _______, _______,      _______,  _______, _______
 )
 };
@@ -227,7 +237,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     default:
       hold_esc = false;
       hold_alt = false;
-      hold_low = false;
+      if (hold_low) {
+        tap_code(KC_LANG2);
+        hold_low = false;
+      }
       break;
   }
   return true;
