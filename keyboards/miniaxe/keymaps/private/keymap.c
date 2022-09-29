@@ -36,6 +36,7 @@ enum custom_keycodes {
   NN_LANG1_GUI,
   NN_LANG1_ALT,
   NN_LANG1_LOW,
+  NN_LANG1_SFT,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -47,7 +48,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_TAB,         KC_W,          KC_E,      KC_R,            KC_T,               KC_Y,            KC_U,         KC_I,    KC_O,    KC_P,
       LCTL_T(KC_A),   KC_S,          KC_D,      KC_F,            KC_G,               KC_H,            KC_J,         KC_K,    KC_L,    KC_Q,
       LSFT_T(KC_Z),   LALT_T(KC_X),  KC_C,      KC_V,            KC_B,               KC_N,            KC_M,         KC_COMM, KC_DOT,  LT(2,KC_SCLN),
-                                     KC_LALT,   NN_L2_ESC_GUI,   LCTL_T(KC_SPC),     LSFT_T(KC_ENT),  NN_LANG1_LOW, LT(3,KC_SLSH)
+                                     KC_LALT,   NN_L2_ESC_GUI,   LCTL_T(KC_SPC),     LT(1,KC_ENT),    NN_LANG1_SFT, LT(3,KC_SLSH)
 ),
 
 /* Lower */
@@ -99,6 +100,7 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
 
 static bool hold_low  = false;
 static bool hold_ctrl = false;
+static bool hold_sft  = false;
 static bool hold_alt  = false;
 static bool hold_esc  = false;
 static bool lang1_on  = false;
@@ -119,6 +121,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         tap_code(KC_LANG1);
         lang1_on = true;
+      }
+      return false;
+      break;
+    case NN_LANG1_SFT:
+      if (record->event.pressed) {
+        hold_sft = true;
+        register_code(KC_LSFT);
+      } else {
+        unregister_code(KC_LSFT);
+        if (hold_sft) {
+          lang1_on = true;
+          tap_code(KC_LANG1);
+        }
+        hold_sft = false;
       }
       return false;
       break;
@@ -240,6 +256,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (hold_low) {
         tap_code(KC_LANG2);
         hold_low = false;
+      }
+      if (hold_sft) {
+        tap_code(KC_LANG2);
+        hold_sft = false;
       }
       break;
   }
