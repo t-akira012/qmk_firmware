@@ -83,16 +83,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 };
 
-bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(2,KC_SLSH):
-            return false;
-        default:
-            return true;
+      case LT(2,KC_SLSH):
+          return 40;
+      default:
+          return TAPPING_TERM;
     }
 }
+// bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case LT(2,KC_SLSH):
+//             return true;
+//         default:
+//             return true;
+//     }
+// }
 
 static bool hold_sum  = false;
+static bool hold_sus  = false;
+static bool hold_ctl  = false;
 static bool hold_low  = false;
 static bool hold_sft  = false;
 static bool hold_alt  = false;
@@ -100,18 +110,45 @@ static bool hold_esc  = false;
 static bool lang1_on  = false;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-  if (hold_sum) {
-    switch (keycode) {
-      case KC_Q:
-        if (record->event.pressed) {
-          unregister_code(KC_RCTL);
-          tap_code(KC_TAB);
-        }
+  // CTL + H to absolute BackSpace
+  // if (keycode == KC_H) {
+  //   if(record->event.pressed) {
+  //     if( hold_sum || hold_ctl ){
+  //       unregister_code(KC_LCTRL);
+  //       unregister_code(KC_RCTRL);
+  //       register_code(KC_BSPACE);
+  //       return false;
+  //     }
+  //   }else{
+  //     unregister_code(KC_BSPACE);
+  //   }
+  // }
+  // Q or TAB
+  if (keycode == KC_Q) {
+    if(hold_sum){
+      if (record->event.pressed) {
+        unregister_code(KC_RCTL);
+        tap_code(KC_TAB);
         return false;
-        break;
+      }
+    }
+    if(hold_sus){
+      if (record->event.pressed) {
+        tap_code(KC_TAB);
+        return false;
+      }
     }
   }
+
   switch (keycode) {
+    case LCTL_T(KC_A):
+       if (record->event.pressed) {
+        hold_ctl = true;
+       } else {
+        hold_ctl = false;
+       }
+      return true;
+      break;
     case RCTL_T(KC_SPC):
       if (record->event.pressed) {
         hold_sum = true;
@@ -182,6 +219,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case NN_L2_ESC_GUI:
       if (record->event.pressed) {
         hold_esc = true;
+        hold_sus = true;
         tap_code(KC_LANG2);
         register_code(KC_LEFT_GUI);
       } else {
@@ -190,6 +228,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           tap_code(KC_ESC);
         }
         hold_esc = false;
+        hold_sus = false;
         lang1_on = false;
       }
       return false;
