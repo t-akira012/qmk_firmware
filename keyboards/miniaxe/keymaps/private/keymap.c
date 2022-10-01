@@ -48,7 +48,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,            KC_U,         KC_I,    KC_O,    KC_P,
       LCTL_T(KC_A),   KC_S,  KC_D,      KC_F,            KC_G,               KC_H,            KC_J,         KC_K,    KC_L,    KC_SCLN,
       LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,            KC_M,         KC_COMM, KC_DOT,  LT(2,KC_SLSH),
-                             KC_LALT,   NN_L2_ESC_GUI,   LCTL_T(KC_SPC),     LT(1,KC_ENT),    NN_LANG1_SFT, LT(3,KC_TAB)
+                             KC_LALT,   NN_L2_ESC_GUI,   RCTL_T(KC_SPC),     LT(1,KC_ENT),    NN_LANG1_SFT, LT(3,KC_TAB)
 ),
 
 /* Lower */
@@ -92,25 +92,34 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+static bool hold_sum  = false;
 static bool hold_low  = false;
-static bool hold_ctrl = false;
 static bool hold_sft  = false;
 static bool hold_alt  = false;
 static bool hold_esc  = false;
 static bool lang1_on  = false;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-  if (hold_ctrl) {
+  if (hold_sum) {
     switch (keycode) {
-      case KC_H:
+      case KC_Q:
         if (record->event.pressed) {
-          tap_code(KC_BSPC);
+          unregister_code(KC_RCTL);
+          tap_code(KC_TAB);
         }
         return false;
         break;
     }
   }
   switch (keycode) {
+    case RCTL_T(KC_SPC):
+      if (record->event.pressed) {
+        hold_sum = true;
+      } else {
+        hold_sum = false;
+      }
+      return true;
+      break;
     case NN_LANG1:
       if (record->event.pressed) {
         tap_code(KC_LANG1);
