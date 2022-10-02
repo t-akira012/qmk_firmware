@@ -98,18 +98,18 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
             return false;
     }
 }
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case LT(2,KC_SLSH):
-            return 300;
-        case LCTL_T(KC_A):
-            return 225;
-        case RCTL_T(KC_SPC):
-            return 200;
-        default:
-            return TAPPING_TERM;
-    }
-}
+// uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case LT(2,KC_SLSH):
+//             return 300;
+//         case LCTL_T(KC_A):
+//             return 225;
+//         case RCTL_T(KC_SPC):
+//             return 100;
+//         default:
+//             return TAPPING_TERM;
+//     }
+// }
 
 static bool hold_sum  = false;
 static bool hold_sus  = false;
