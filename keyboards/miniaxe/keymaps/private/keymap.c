@@ -54,24 +54,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Lower */
 /*  1 2 3 4 5  6 7 8 9 0
     ( ) { } `  - = " ' :
-    [ ] < > |  _ + \ ; NO
+    [ ] < > |  _ + ~ \ NO
  */
 [_LOWER] = LAYOUT_split_3x5_3(
       KC_1,               KC_2,    KC_3,    KC_4,      KC_5,          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
       KC_LPRN,            KC_RPRN, KC_LCBR, KC_RCBR,   KC_GRV,        KC_MINS, KC_EQL,  KC_DQUO, KC_QUOT, KC_SCLN,
-      LSFT_T(KC_LBRC),    KC_RBRC, KC_LT,   KC_GT,     KC_PIPE,       KC_UNDS, KC_PLUS, KC_BSLS, KC_SCLN, KC_NO,
+      LSFT_T(KC_LBRC),    KC_RBRC, KC_LT,   KC_GT,     KC_PIPE,       KC_UNDS, KC_PLUS, KC_TILD, KC_BSLS, KC_NO,
                                    KC_TRNS, KC_TRNS,   KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS
 ),
 
 /* Raise */
 /*  ! @ # $ %  ^ & * ? BS
     ( ) { } `  - = " ' :
-    [ ] < > |  _ + \ ; NO
+    [ ] < > |  _ + ~ \ NO
 */
 [_RAISE] = LAYOUT_split_3x5_3(
       KC_EXLM,            KC_AT,   KC_HASH, KC_DLR,    KC_PERC,       KC_CIRC, KC_AMPR, KC_ASTR, KC_QUES, KC_BSPC,
       KC_LPRN,            KC_RPRN, KC_LCBR, KC_RCBR,   KC_GRV,        KC_MINS, KC_EQL,  KC_DQUO, KC_QUOT, KC_SCLN,
-      LSFT_T(KC_LBRC),    KC_RBRC, KC_LT,   KC_GT,     KC_PIPE,       KC_UNDS, KC_PLUS, KC_BSLS, KC_SCLN, KC_NO,
+      LSFT_T(KC_LBRC),    KC_RBRC, KC_LT,   KC_GT,     KC_PIPE,       KC_UNDS, KC_PLUS, KC_TILD, KC_BSLS, KC_NO,
                                    KC_TRNS, KC_TRNS,   KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS
 ),
 /* Adjust (Lower + Raise) */
