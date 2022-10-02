@@ -93,9 +93,27 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
         case LT(2,KC_SLSH):
             return true;
         case RCTL_T(KC_SPC):
+            return false;
+        default:
+            return false;
+    }
+}
+bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case RCTL_T(KC_SPC):
             return true;
         default:
             return false;
+    }
+}
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(2,KC_SLSH):
+            return 300;
+        case LCTL_T(KC_A):
+            return 200;
+        default:
+            return TAPPING_TERM;
     }
 }
 
