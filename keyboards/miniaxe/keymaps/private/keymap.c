@@ -98,14 +98,15 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
             return false;
     }
 }
-bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case RCTL_T(KC_SPC):
-            return true;
-        default:
-            return false;
-    }
-}
+// tap space hold space での space 連続入力を抑止する
+// bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case RCTL_T(KC_SPC):
+//             return true;
+//         default:
+//             return false;
+//     }
+// }
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case RCTL_T(KC_SPC):
@@ -119,6 +120,15 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+// 高速に連続して押した場合に「ホールド＋タップ」とみなす
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case RCTL_T(KC_SPC):
+            return false;
+        default:
+            return true;
+    }
+}
 static bool hold_sum  = false;
 static bool hold_sus  = false;
 static bool hold_ctl  = false;
