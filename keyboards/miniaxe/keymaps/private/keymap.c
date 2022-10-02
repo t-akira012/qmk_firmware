@@ -83,22 +83,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 };
 
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-      case LT(2,KC_SLSH):
-          return 40;
-      default:
-          return TAPPING_TERM;
+        case LCTL_T(KC_A):
+            return true;
+        // hold shift のつもりが z tap に化ける事象が多発するため false
+        case LSFT_T(KC_Z):
+            return false;
+        case LT(2,KC_SLSH):
+            return true;
+        case RCTL_T(KC_SPC):
+            return true;
+        default:
+            return false;
     }
 }
-// bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
-//     switch (keycode) {
-//         case LT(2,KC_SLSH):
-//             return true;
-//         default:
-//             return true;
-//     }
-// }
 
 static bool hold_sum  = false;
 static bool hold_sus  = false;
@@ -307,20 +306,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
-
-
-// #include "planck.h"
-// 
-// #ifdef SWAP_HANDS_ENABLE
-// __attribute__ ((weak))
-// const keypos_t PROGMEM hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
-//     {{11, 0}, {10, 0}, {9, 0}, {8, 0}, {7, 0}, {6, 0}, {5, 0}, {4, 0}, {3, 0}, {2, 0}, {1, 0}, {0, 0}},
-//     {{11, 1}, {10, 1}, {9, 1}, {8, 1}, {7, 1}, {6, 1}, {5, 1}, {4, 1}, {3, 1}, {2, 1}, {1, 1}, {0, 1}},
-//     {{11, 2}, {10, 2}, {9, 2}, {8, 2}, {7, 2}, {6, 2}, {5, 2}, {4, 2}, {3, 2}, {2, 2}, {1, 2}, {0, 2}},
-//     {{11, 3}, {10, 3}, {9, 3}, {8, 3}, {7, 3}, {6, 3}, {5, 3}, {4, 3}, {3, 3}, {2, 3}, {1, 3}, {0, 3}},
-// };
-// 
-// #    ifdef ENCODER_MAP_ENABLE
-// const uint8_t PROGMEM encoder_hand_swap_config[NUM_ENCODERS] = {0};
-// #    endif
-// #endif
