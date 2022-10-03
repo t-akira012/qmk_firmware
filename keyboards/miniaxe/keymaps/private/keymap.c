@@ -138,6 +138,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (keycode == KC_Q) {
     if(hold_sum){
       if (record->event.pressed) {
+        unregister_code(KC_LCTL);
         unregister_code(KC_RCTL);
         tap_code(KC_TAB);
         return false;
