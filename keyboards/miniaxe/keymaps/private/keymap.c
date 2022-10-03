@@ -164,6 +164,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return true;
       break;
     case RCTL_T(KC_SPC):
+      hold_esc = false;
+      hold_alt = false;
+      if (hold_rai) {
+        tap_code(KC_LANG2);
+        hold_rai = false;
+      }
+      if (hold_low) {
+        tap_code(KC_LANG2);
+        hold_low = false;
+      }
+      if (hold_sft) {
+        tap_code(KC_LANG2);
+        hold_sft = false;
+      }
       if (record->event.pressed) {
         hold_sum = true;
       } else {
