@@ -49,7 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,            KC_U,         KC_I,    KC_O,    KC_P,
       LCTL_T(KC_A),   KC_S,  KC_D,      KC_F,            KC_G,               KC_H,            KC_J,         KC_K,    KC_L,    KC_COLN,
       LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,            KC_M,         KC_COMM, KC_DOT,  KC_SLSH,
-                             KC_LALT,   NN_L2_ESC_GUI,   LT(1,KC_SPC),       LSFT_T(KC_ENT),  NN_LANG1_RAI, LT(3,KC_TAB)
+                             KC_LALT,   NN_L2_ESC_GUI,   RSFT_T(KC_SPC),     LT(1,KC_ENT),    NN_LANG1_RAI, LT(3,KC_TAB)
 ),
 
 /* Lower */
@@ -61,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_1,               KC_2,    KC_3,    KC_4,      KC_5,          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
       KC_LPRN,            KC_RPRN, KC_LCBR, KC_RCBR,   KC_GRV,        KC_MINS, KC_EQL,  KC_DQUO, KC_QUOT, KC_SCLN,
       KC_LBRC,            KC_RBRC, KC_LT,   KC_GT,     KC_PIPE,       KC_UNDS, KC_PLUS, KC_TILD, KC_BSLS, KC_NO,
-                                   KC_TRNS, KC_TRNS,   KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS
+                                   KC_TRNS, KC_TRNS,   KC_SPC,        KC_TRNS, KC_TRNS, KC_TRNS
 ),
 
 /* Raise */
@@ -138,8 +138,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (keycode == KC_Q) {
     if(hold_sum){
       if (record->event.pressed) {
-        unregister_code(KC_LCTL);
-        unregister_code(KC_RCTL);
+        unregister_code(KC_RSFT);
         tap_code(KC_TAB);
         return false;
       }
@@ -166,7 +165,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
        }
       return true;
       break;
-    case RCTL_T(KC_SPC):
+    case RSFT_T(KC_SPC):
       hold_esc = false;
       hold_alt = false;
       if (hold_rai) {
