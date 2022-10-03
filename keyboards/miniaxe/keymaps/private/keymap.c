@@ -36,6 +36,7 @@ enum custom_keycodes {
   NN_LANG1_GUI,
   NN_LANG1_ALT,
   NN_LANG1_LOW,
+  NN_LANG1_RAI,
   NN_LANG1_SFT,
 };
 
@@ -87,13 +88,13 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LCTL_T(KC_A):
             return true;
-        // hold shift のつもりが z tap に化ける事象が多発するため false
-        case LSFT_T(KC_Z):
-            return false;
         case LT(2,KC_SLSH):
             return true;
         case RCTL_T(KC_SPC):
             return true;
+        // hold shift のつもりが z tap に化ける事象が多発するため false
+        case LSFT_T(KC_Z):
+            return false;
         default:
             return false;
     }
@@ -115,6 +116,7 @@ static bool hold_sum  = false;
 static bool hold_sus  = false;
 static bool hold_ctl  = false;
 static bool hold_low  = false;
+static bool hold_rai  = false;
 static bool hold_sft  = false;
 static bool hold_alt  = false;
 static bool hold_esc  = false;
@@ -153,6 +155,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   switch (keycode) {
     case LCTL_T(KC_A):
+       hold_esc = false;
        if (record->event.pressed) {
         hold_ctl = true;
        } else {
@@ -186,6 +189,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           tap_code(KC_LANG1);
         }
         hold_sft = false;
+      }
+      return false;
+      break;
+    case NN_LANG1_RAI:
+      if (record->event.pressed) {
+        hold_rai = true;
+        layer_on(_RAISE);
+      } else {
+        layer_off(_RAISE);
+        if (hold_low) {
+          lang1_on = true;
+          tap_code(KC_LANG1);
+        }
+        hold_rai = false;
       }
       return false;
       break;
@@ -306,6 +323,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     default:
       hold_esc = false;
       hold_alt = false;
+      if (hold_rai) {
+        tap_code(KC_LANG2);
+        hold_rai = false;
+      }
       if (hold_low) {
         tap_code(KC_LANG2);
         hold_low = false;
