@@ -267,7 +267,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         tap_timer = timer_read();
       } else {
         unregister_code(KC_LEFT_GUI);
-        if (!lang1_on && hold_esc && timer_elapsed(tap_timer) < 300) {
+        if (!lang1_on && hold_esc && timer_elapsed(tap_timer) < 150) {
           tap_code(KC_ESC);
         }
         hold_esc = false;
