@@ -37,17 +37,18 @@ enum custom_keycodes {
   NN_LANG1_ALT,
   NN_LANG1_LOW,
   NN_LANG1_SFT,
-  NN_Z
+  NN_Z,
+  NN_ENT
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty */
 [_QWERTY] = LAYOUT_split_3x5_3(
-      KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,            KC_U,         KC_I,    KC_O,    KC_P,
-      LCTL_T(KC_A),   KC_S,  KC_D,      KC_F,            KC_G,               KC_H,            KC_J,         KC_K,    KC_L,    KC_COLN,
-      NN_Z,           KC_X,  KC_C,      KC_V,            KC_B,               KC_N,            KC_M,         KC_COMM, KC_DOT,  LT(1,KC_SLSH),
-                             KC_LALT,   NN_L2_ESC_GUI,   RCTL_T(KC_SPC),     LSFT_T(KC_ENT),  NN_LANG1_ALT, LT(3,KC_TAB)
+      KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,    KC_U,         KC_I,    KC_O,    KC_P,
+      LCTL_T(KC_A),   KC_S,  KC_D,      KC_F,            KC_G,               KC_H,    KC_J,         KC_K,    KC_L,    KC_COLN,
+      LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,    KC_M,         KC_COMM, KC_DOT,  LT(1,KC_SLSH),
+                             KC_ESC,    NN_L2_ESC_GUI,   RCTL_T(KC_SPC),     NN_ENT,  NN_LANG1_ALT, LT(3,KC_TAB)
 ),
 
 /* Lower */
@@ -110,14 +111,17 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
 //     }
 // }
 
-static bool hold_sum  = false;
-static bool hold_sus  = false;
-static bool hold_ctl  = false;
-static bool hold_low  = false;
-static bool hold_sft  = false;
-static bool hold_alt  = false;
-static bool hold_esc  = false;
-static bool lang1_on  = false;
+static bool hold_rsum1  = false;
+static bool hold_lpin1  = false;
+static bool hold_sum    = false;
+static bool hold_sus    = false;
+static bool hold_ctl    = false;
+static bool hold_low    = false;
+static bool hold_sft    = false;
+static bool hold_alt    = false;
+static bool hold_esc    = false;
+static bool lang1_on    = false;
+static uint16_t tap_timer;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   // CTL + H to absolute BackSpace
@@ -149,19 +153,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
     }
   }
-  if (keycode == NN_Z) {
-    if (record->event.pressed) {
-      if(hold_sum||hold_sus){
-        register_code(KC_LSFT);
-      }
-    } else {
-      tap_code(KC_Z);
-      unregister_code(KC_LSFT);
-    }
-    return false;
-  }
 
   switch (keycode) {
+    case NN_ENT:
+       if (record->event.pressed) {
+        hold_rsum1 = true;
+        register_code(KC_RSFT);
+        tap_timer = timer_read();
+       } else {
+        unregister_code(KC_RSFT);
+        if (hold_rsum1 && timer_elapsed(tap_timer) < 200) {
+          tap_code(KC_ENT);
+        }
+        hold_rsum1 = false;
+       }
+      return true;
+      break;
     case LCTL_T(KC_A):
        if (record->event.pressed) {
         hold_ctl = true;
@@ -243,9 +250,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         hold_sus = true;
         tap_code(KC_LANG2);
         register_code(KC_LEFT_GUI);
+        tap_timer = timer_read();
       } else {
         unregister_code(KC_LEFT_GUI);
-        if (!lang1_on && hold_esc) {
+        if (!lang1_on && hold_esc && timer_elapsed(tap_timer) < 300) {
           tap_code(KC_ESC);
         }
         hold_esc = false;
@@ -314,8 +322,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
       break;
     default:
-      hold_esc = false;
-      hold_alt = false;
+      hold_esc   = false;
+      hold_alt   = false;
+      hold_rsum1 = false;
+      hold_lpin1 = false;
       if (hold_low) {
         tap_code(KC_LANG2);
         hold_low = false;
