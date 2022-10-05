@@ -37,8 +37,8 @@ enum custom_keycodes {
   NN_LANG1_ALT,
   NN_LANG1_LOW,
   NN_LANG1_SFT,
-  NN_Z,
-  NN_ENT
+  NN_ENT,
+  NN_RPIN1,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -47,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_split_3x5_3(
       KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,    KC_U,         KC_I,    KC_O,    KC_P,
       LCTL_T(KC_A),   KC_S,  KC_D,      KC_F,            KC_G,               KC_H,    KC_J,         KC_K,    KC_L,    KC_COLN,
-      LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,    KC_M,         KC_COMM, KC_DOT,  LT(1,KC_SLSH),
+      LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,    KC_M,         KC_COMM, KC_DOT,  NN_RPIN1,
                              KC_ESC,    NN_L2_ESC_GUI,   RCTL_T(KC_SPC),     NN_ENT,  NN_LANG1_ALT, LT(3,KC_TAB)
 ),
 
@@ -112,7 +112,7 @@ bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
 // }
 
 static bool hold_rsum1  = false;
-static bool hold_lpin1  = false;
+static bool hold_rpin1  = false;
 static bool hold_sum    = false;
 static bool hold_sus    = false;
 static bool hold_ctl    = false;
@@ -155,6 +155,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
 
   switch (keycode) {
+    case NN_RPIN1:
+       if (record->event.pressed) {
+        hold_rpin1 = true;
+        layer_on(_LOWER);
+        tap_timer = timer_read();
+       } else {
+        layer_off(_LOWER);
+        if (hold_rpin1 && timer_elapsed(tap_timer) < 200) {
+          tap_code(KC_SLSH);
+        }
+        hold_rpin1 = false;
+       }
+      return false;
+      break;
     case NN_ENT:
        if (record->event.pressed) {
         hold_rsum1 = true;
@@ -167,7 +181,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         hold_rsum1 = false;
        }
-      return true;
+      return false;
       break;
     case LCTL_T(KC_A):
        if (record->event.pressed) {
@@ -325,7 +339,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       hold_esc   = false;
       hold_alt   = false;
       hold_rsum1 = false;
-      hold_lpin1 = false;
+      hold_rpin1 = false;
       if (hold_low) {
         tap_code(KC_LANG2);
         hold_low = false;
