@@ -37,18 +37,17 @@ enum custom_keycodes {
   NN_LANG1_ALT,
   NN_LANG1_LOW,
   NN_LANG1_SFT,
+  NN_Z
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
-// TODO: 記号系を1レイヤーにまとめてshiftの同時押下を不要にする
 
 /* Qwerty */
 [_QWERTY] = LAYOUT_split_3x5_3(
       KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,            KC_U,         KC_I,    KC_O,    KC_P,
       LCTL_T(KC_A),   KC_S,  KC_D,      KC_F,            KC_G,               KC_H,            KC_J,         KC_K,    KC_L,    KC_COLN,
-      LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,            KC_M,         KC_COMM, KC_DOT,  LT(2,KC_SLSH),
-                             KC_LALT,   NN_L2_ESC_GUI,   RCTL_T(KC_SPC),     LT(1,KC_ENT),    NN_LANG1_SFT, LT(3,KC_TAB)
+      NN_Z,           KC_X,  KC_C,      KC_V,            KC_B,               KC_N,            KC_M,         KC_COMM, KC_DOT,  LT(1,KC_SLSH),
+                             KC_LALT,   NN_L2_ESC_GUI,   RCTL_T(KC_SPC),     LSFT_T(KC_ENT),  NN_LANG1_GUI, LT(3,KC_TAB)
 ),
 
 /* Lower */
@@ -149,6 +148,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
       }
     }
+  }
+  if (keycode == NN_Z) {
+    if (record->event.pressed) {
+      if(hold_sum||hold_sus){
+        register_code(KC_LSFT);
+      }
+    } else {
+      tap_code(KC_Z);
+      unregister_code(KC_LSFT);
+    }
+    return false;
   }
 
   switch (keycode) {
