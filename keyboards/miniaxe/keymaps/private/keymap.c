@@ -47,8 +47,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Qwerty */
 [_QWERTY] = LAYOUT_split_3x5_3(
       KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,    KC_U,         KC_I,    KC_O,    KC_P,
-      LCTL_T(KC_A),   KC_S,  KC_D,      KC_F,            KC_G,               KC_H,    KC_J,         KC_K,    KC_L,    KC_COLN,
-      LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,    KC_M,         KC_COMM, KC_DOT,  NN_RPIN1,
+      KC_A,           KC_S,  KC_D,      KC_F,            KC_G,               KC_H,    KC_J,         KC_K,    KC_L,    KC_COLN,
+      KC_Z,           KC_X,  KC_C,      KC_V,            KC_B,               KC_N,    KC_M,         KC_COMM, KC_DOT,  NN_RPIN1,
                              KC_BSPC,   NN_L2_ESC_GUI,   RCTL_T(KC_SPC),     NN_ENT,  NN_LANG1_RAI, LT(3,KC_TAB)
 ),
 
@@ -149,14 +149,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
 
   switch (keycode) {
+    case KC_A:
+      if(record->event.pressed){
+          if(hold_sus||hold_sum){
+            register_code(KC_LCTL);
+          }
+        tap_timer = timer_read();
+        } else {
+          unregister_code(KC_LCTL);
+          if(!(hold_sus||hold_sum)||timer_elapsed(tap_timer) < 200){
+            tap_code(KC_A);
+          }
+        }
+      return false;
+      break;
     case KC_Z:
       if(record->event.pressed){
           if(hold_sus||hold_sum){
             register_code(KC_LSFT);
           }
+        tap_timer = timer_read();
         } else {
           unregister_code(KC_LSFT);
-          if(!(hold_sus||hold_sum)){
+          if(!(hold_sus||hold_sum)||timer_elapsed(tap_timer) < 200){
             tap_code(KC_Z);
           }
         }
