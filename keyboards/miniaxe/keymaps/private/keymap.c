@@ -197,7 +197,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
        if (record->event.pressed) {
         hold_rsum1 = true;
         tap_timer = timer_read();
-        // register_code(KC_RSFT);
+        register_code(KC_RSFT);
        } else {
         unregister_code(KC_RSFT);
         if (hold_rsum1 && timer_elapsed(tap_timer) < 200) {
