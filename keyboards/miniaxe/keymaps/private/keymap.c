@@ -276,11 +276,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         hold_alt = true;
         register_code(KC_RIGHT_ALT);
+        tap_timer = timer_read();
       } else {
         unregister_code(KC_RIGHT_ALT);
-        if (hold_alt) {
+        if (hold_alt && timer_elapsed(tap_timer) < 180) {
           lang1_on = true;
           tap_code(KC_LANG1);
+        } else {
+          lang1_on = false;
+          tap_code(KC_LANG2);
         }
         hold_alt = false;
       }
