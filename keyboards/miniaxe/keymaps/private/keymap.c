@@ -56,8 +56,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Lower */
 /*  1 2 3 4 5  6 7 8 9 0
-    ( ) { } `  - = " ' :
-    [ ] < > |  _ + ~ \ NO
+    ( ) { } `  " - = ' :
+    [ ] < > |  ~ _ + \ NO
  */
 [_LOWER] = LAYOUT_split_3x5_3(
       KC_1,         KC_2,    KC_3,    KC_4,      KC_5,          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
@@ -68,8 +68,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Raise */
 /*  ! @ # $ %  ^ & * ? BS
-    ( ) { } `  - = " ' :
-    [ ] < > |  _ + ~ \ NO
+    ( ) { } `  " - = ' :
+    [ ] < > |  ~ _ + \ NO
 */
 [_RAISE] = LAYOUT_split_3x5_3(
       KC_EXLM,      KC_AT,   KC_HASH, KC_DLR,    KC_PERC,       KC_CIRC, KC_AMPR, KC_ASTR, KC_QUES, KC_BSPC,
@@ -86,35 +86,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 };
 
-bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case LCTL_T(KC_A):
-            return true;
-        case LSFT_T(KC_Z):
-            return true;
-        default:
-            return false;
-    }
-}
-// uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-//     switch (keycode) {
-//         case LT(2,KC_SLSH):
-//             return 300;
-//         case LCTL_T(KC_A):
-//             return 225;
-//         case RCTL_T(KC_SPC):
-//             return 100;
-//         default:
-//             return TAPPING_TERM;
-//     }
-// }
-
 static bool hold_rsum1  = false;
 static bool hold_rpin1  = false;
 static bool hold_sum    = false;
 static bool hold_sus    = false;
 static bool hold_ctl    = false;
 static bool hold_low    = false;
+static bool hold_rai    = false;
 static bool hold_sft    = false;
 static bool hold_alt    = false;
 static bool hold_esc    = false;
@@ -135,7 +113,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   //     unregister_code(KC_BSPACE);
   //   }
   // }
-  // Q or TAB
+
+  // CTL + Q to CTL + A
   if (keycode == KC_Q) {
     if(hold_sum){
       if (record->event.pressed) {
@@ -234,6 +213,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
       break;
     case LCTL_T(KC_A):
+       hold_esc = false;
        if (record->event.pressed) {
         hold_ctl = true;
        } else {
@@ -242,6 +222,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return true;
       break;
     case RCTL_T(KC_SPC):
+      hold_esc = false;
+      hold_alt = false;
+      if (hold_rai) {
+        tap_code(KC_LANG2);
+        hold_rai = false;
+      }
+      if (hold_low) {
+        tap_code(KC_LANG2);
+        hold_low = false;
+      }
+      if (hold_sft) {
+        tap_code(KC_LANG2);
+        hold_sft = false;
+      }
       if (record->event.pressed) {
         hold_sum = true;
       } else {

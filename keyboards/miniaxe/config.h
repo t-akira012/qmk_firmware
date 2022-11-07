@@ -21,9 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* private option */
 #define IGNORE_MOD_TAP_INTERRUPT_PER_KEY
-// #define TAPPING_TERM 100
+#define TAPPING_TERM 185
 // 他のキーを押さなければ長押し判定になるタイミングでも単押しにする
-#define RETRO_TAPPING
+// #define RETRO_TAPPING
 // 単押し判定のタイミングでも他のキーを一緒に押したら長押し判定にする
 #define PERMISSIVE_HOLD
 
