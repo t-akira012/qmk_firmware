@@ -56,25 +56,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Lower */
 /*  1 2 3 4 5  6 7 8 9 0
-    ( ) { } `  " - = ' :
-    [ ] < > |  ~ _ + \ NO
+    ( ) { } ~  - = " ' :
+    [ ] \ ` |  _ + , . N
  */
 [_LOWER] = LAYOUT_split_3x5_3(
       KC_1,         KC_2,    KC_3,    KC_4,      KC_5,          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
-      KC_LPRN,      KC_RPRN, KC_LCBR, KC_RCBR,   KC_GRV,        KC_DQUO, KC_MINS, KC_EQL,  KC_QUOT, KC_COLN,
-      KC_LBRC,      KC_RBRC, KC_LT,   KC_GT,     KC_PIPE,       KC_TILD, KC_UNDS, KC_PLUS, KC_BSLS, KC_NO,
+      KC_LPRN,      KC_RPRN, KC_LCBR, KC_RCBR,   KC_TILD,        KC_MINS, KC_EQL,  KC_DQUO, KC_QUOT, KC_COLN,
+      KC_LBRC,      KC_RBRC, KC_BSLS, KC_GRV,    KC_PIPE,       KC_UNDS, KC_PLUS, KC_COMM, KC_DOT,  KC_NO,
                              KC_TRNS, KC_TRNS,   KC_TRNS,       MO(_RAISE), KC_TRNS, CUT
 ),
 
 /* Raise */
 /*  ! @ # $ %  ^ & * ? BS
-    ( ) { } `  " - = ' :
-    [ ] < > |  ~ _ + \ NO
+    ( ) { } ~  - = " ' :
+    [ ] \ ` |  _ + , . N
 */
 [_RAISE] = LAYOUT_split_3x5_3(
       KC_EXLM,      KC_AT,   KC_HASH, KC_DLR,    KC_PERC,       KC_CIRC, KC_AMPR, KC_ASTR, KC_QUES, KC_BSPC,
-      KC_LPRN,      KC_RPRN, KC_LCBR, KC_RCBR,   KC_GRV,        KC_DQUO, KC_MINS, KC_EQL,  KC_QUOT, KC_COLN,
-      KC_LBRC,      KC_RBRC, KC_LT,   KC_GT,     KC_PIPE,       KC_TILD, KC_UNDS, KC_PLUS, KC_BSLS, KC_NO,
+      KC_LPRN,      KC_RPRN, KC_LCBR, KC_RCBR,   KC_TILD,        KC_MINS, KC_EQL,  KC_DQUO, KC_QUOT, KC_COLN,
+      KC_LBRC,      KC_RBRC, KC_BSLS, KC_GRV,    KC_PIPE,       KC_UNDS, KC_PLUS, KC_COMM, KC_DOT,  KC_NO,
                              KC_TRNS, KC_TRNS,   KC_TRNS,       KC_NO,   KC_TRNS, CUT
 ),
 /* Adjust (Lower + Raise) */
