@@ -114,6 +114,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   //   }
   // }
 
+  // GUI + M の無効化
+  if ( hold_sus && keycode == KC_M ) {
+    return false;
+  }
+
   // CTL + Q to CTL + A
   if (keycode == KC_Q) {
     if(hold_sum){
