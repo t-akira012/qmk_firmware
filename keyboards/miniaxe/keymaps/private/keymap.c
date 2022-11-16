@@ -51,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_split_3x5_3(
       KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,    KC_U,         KC_I,    KC_O,    KC_P,
       KC_A,           KC_S,  KC_D,      KC_F,            KC_G,               KC_H,    KC_J,         KC_K,    KC_L,    LT(3,KC_SCLN),
-      KC_Z,           KC_X,  KC_C,      KC_V,            KC_B,               KC_N,    KC_M,         KC_COMM, KC_DOT,  NN_RPIN1,
+      LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,    KC_M,         KC_COMM, KC_DOT,  NN_RPIN1,
                              EMOJI,     NN_L2_ESC_GUI,   RCTL_T(KC_SPC),     NN_ENT,  NN_LANG1_ALT, KC_DEL
 ),
 
@@ -216,7 +216,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         register_code(KC_RSFT);
        } else {
         unregister_code(KC_RSFT);
-        if (hold_rsum1 && timer_elapsed(tap_timer) < 140) {
+        if (hold_rsum1 && timer_elapsed(tap_timer) < 180) {
           tap_code(KC_ENT);
         }
         hold_rsum1 = false;
