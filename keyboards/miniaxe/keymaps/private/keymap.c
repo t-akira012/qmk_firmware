@@ -169,6 +169,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case KC_A:
       if(record->event.pressed){
+          hold_esc   = false;
+          hold_alt   = false;
+          hold_rsum1 = false;
+          hold_rpin1 = false;
           if(hold_sus||hold_sum){
             register_code(KC_LCTL);
           }
@@ -183,6 +187,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case KC_Z:
       if(record->event.pressed){
+          hold_esc   = false;
+          hold_alt   = false;
+          hold_rsum1 = false;
+          hold_rpin1 = false;
           if(hold_sus||hold_sum){
             register_code(KC_LSFT);
           }
