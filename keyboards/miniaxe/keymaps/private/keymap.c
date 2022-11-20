@@ -28,9 +28,9 @@ enum custom_keycodes {
   LOWER,
   RAISE,
   ADJUST,
-  NN_LSUM2,
+  NN_RSUM1,
   NN_RSUM2,
-  NN_ENT,
+  NN_LSUM2,
   NN_RPIN1,
   EMOJI,
   M_COP,
@@ -40,10 +40,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty */
 [_QWERTY] = LAYOUT_split_3x5_3(
-      KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,    KC_U,         KC_I,    KC_O,    KC_P,
-      KC_A,           KC_S,  KC_D,      KC_F,            KC_G,               KC_H,    KC_J,         KC_K,    KC_L,    LT(3,KC_SCLN),
-      LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,    KC_M,         KC_COMM, KC_DOT,  NN_RPIN1,
-                             M_COP,     NN_LSUM2,        RCTL_T(KC_SPC),     NN_ENT,  NN_RSUM2, KC_DEL
+      KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,     KC_U,         KC_I,    KC_O,    KC_P,
+      KC_A,           KC_S,  KC_D,      KC_F,            KC_G,               KC_H,     KC_J,         KC_K,    KC_L,    LT(3,KC_SCLN),
+      LSFT_T(KC_Z),   KC_X,  KC_C,      KC_V,            KC_B,               KC_N,     KC_M,         KC_COMM, KC_DOT,  NN_RPIN1,
+                             M_COP,     NN_LSUM2,        RCTL_T(KC_SPC),     NN_RSUM1, NN_RSUM2, KC_DEL
 ),
 
 /* Lower */
@@ -233,7 +233,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case NN_ENT:
+    case NN_RSUM1:
       if (record->event.pressed) {
         presscheck_ent = true;
         tap_timer = timer_read();
