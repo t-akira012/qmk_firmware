@@ -103,10 +103,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   if ( hold_lsum1 ) {
     // lsum1 押下中なら ctrl on にする
-    if (keycode) {
-      if(record->event.pressed) {
-        register_code(KC_RCTL);
-      }
+    if (keycode && record->event.pressed) {
+      register_code(KC_RCTL);
     }
 
     // Absolute Backspace
