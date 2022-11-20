@@ -102,12 +102,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
   }
   if ( hold_lsum1 ) {
+    // lsum1 押下中なら ctrl on にする
+    if (keycode) {
+      if(record->event.pressed) {
+        register_code(KC_RCTL);
+      }
+    }
+
     // Absolute Backspace
     if (keycode == KC_H) {
       if(record->event.pressed) {
         bspc_on = true;
-        unregister_code(KC_LCTRL);
-        unregister_code(KC_RCTRL);
+        unregister_code(KC_LCTL);
+        unregister_code(KC_RCTL);
         register_code(KC_BSPACE);
         return false;
       }else{
@@ -120,7 +127,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Absolute TAB
     if (keycode == KC_I) {
       if(record->event.pressed) {
-        unregister_code(KC_RCTRL);
+        unregister_code(KC_RCTL);
         tap_code(KC_TAB);
         return false;
       }
@@ -129,37 +136,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Absolute ENT
     if (keycode == KC_M) {
       if(record->event.pressed) {
-        unregister_code(KC_RCTRL);
+        unregister_code(KC_RCTL);
         tap_code(KC_ENT);
         return false;
-      }
-    }
-
-    // lsum1 押下中なら ctrl on にする
-    if (keycode) {
-      if(record->event.pressed) {
-        register_code(KC_RCTRL);
-      } else {
-          unregister_code(KC_RCTRL);
       }
     }
   }
 
 
-  // CTL + Q to CTL + A
-  if (keycode == KC_Q) {
-    if(hold_lsum1){
-      if (record->event.pressed) {
-        unregister_code(KC_RCTL);
-        tap_code(KC_TAB);
-        return false;
-      }
+  // CTL + Q to TAB
+  if ( hold_lsum1 && keycode == KC_Q ){
+    if (record->event.pressed) {
+      unregister_code(KC_RCTL);
+      tap_code(KC_TAB);
+      return false;
     }
-    if(hold_lsum2){
-      if (record->event.pressed) {
-        tap_code(KC_TAB);
-        return false;
-      }
+  }
+  if ( hold_lsum2 && keycode == KC_Q ){
+    if (record->event.pressed) {
+      tap_code(KC_TAB);
+      return false;
     }
   }
 
