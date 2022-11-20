@@ -102,7 +102,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
   }
   if ( hold_lsum1 ) {
-    // CTL + H to absolute BackSpace
+    // Absolute Backspace
     if (keycode == KC_H) {
       if(record->event.pressed) {
         bspc_on = true;
@@ -117,6 +117,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
     }
 
+    // Absolute TAB
     if (keycode == KC_I) {
       if(record->event.pressed) {
         unregister_code(KC_RCTRL);
@@ -125,6 +126,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
     }
 
+    // Absolute ENT
     if (keycode == KC_M) {
       if(record->event.pressed) {
         unregister_code(KC_RCTRL);
