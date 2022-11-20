@@ -100,24 +100,59 @@ static bool lang1_on    = false;
 static uint16_t tap_timer;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-  // CTL + H to absolute BackSpace
-  // if (keycode == KC_H) {
-  //   if(record->event.pressed) {
-  //     if( hold_sum || hold_ctl ){
-  //       unregister_code(KC_LCTRL);
-  //       unregister_code(KC_RCTRL);
-  //       register_code(KC_BSPACE);
-  //       return false;
-  //     }
-  //   }else{
-  //     unregister_code(KC_BSPACE);
-  //   }
-  // }
-
   // GUI + M の無効化
   if ( hold_sus && keycode == KC_M ) {
     return false;
   }
+
+  // emacs like keybind
+  if ( hold_sum ) {
+    hold_esc   = false;
+    hold_alt   = false;
+    hold_rsum1 = false;
+    hold_rpin1 = false;
+    // CTL + H to absolute BackSpace
+    if (keycode == KC_H) {
+      if(record->event.pressed) {
+        unregister_code(KC_LCTRL);
+        unregister_code(KC_RCTRL);
+        register_code(KC_BSPACE);
+        return false;
+      }else{
+        unregister_code(KC_BSPACE);
+      }
+    }
+
+    if (keycode == KC_I) {
+      if(record->event.pressed) {
+        unregister_code(KC_RCTRL);
+        return false;
+      }else{
+        tap_code(KC_TAB);
+      }
+    }
+
+    if (keycode == KC_M) {
+      if(record->event.pressed) {
+        unregister_code(KC_RCTRL);
+        return false;
+      }else{
+        tap_code(KC_ENT);
+      }
+    }
+
+    if (keycode == KC_S) {
+      if(record->event.pressed) {
+        register_code(KC_RCTRL);
+        tap_code(KC_S);
+        return false;
+      }else{
+        unregister_code(KC_RCTRL);
+      }
+    }
+
+  }
+
 
   // CTL + Q to CTL + A
   if (keycode == KC_Q) {
@@ -161,75 +196,75 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case KC_A:
       if(record->event.pressed){
-          hold_esc   = false;
-          hold_alt   = false;
-          hold_rsum1 = false;
-          hold_rpin1 = false;
-          if(hold_sus||hold_sum){
-            register_code(KC_LCTL);
-          }
-        tap_timer = timer_read();
-        } else {
-          unregister_code(KC_LCTL);
-          if(!(hold_sus||hold_sum)||timer_elapsed(tap_timer) < 200){
-            tap_code(KC_A);
-          }
+        hold_esc   = false;
+        hold_alt   = false;
+        hold_rsum1 = false;
+        hold_rpin1 = false;
+        if(hold_sus||hold_sum){
+          register_code(KC_LCTL);
         }
+        tap_timer = timer_read();
+      } else {
+        unregister_code(KC_LCTL);
+        if(!(hold_sus||hold_sum)||timer_elapsed(tap_timer) < 200){
+          tap_code(KC_A);
+        }
+      }
       return false;
       break;
     case KC_Z:
       if(record->event.pressed){
-          hold_esc   = false;
-          hold_alt   = false;
-          hold_rsum1 = false;
-          hold_rpin1 = false;
-          if(hold_sus||hold_sum){
-            register_code(KC_LSFT);
-          }
-        tap_timer = timer_read();
-        } else {
-          unregister_code(KC_LSFT);
-          if(!(hold_sus||hold_sum)||timer_elapsed(tap_timer) < 200){
-            tap_code(KC_Z);
-          }
+        hold_esc   = false;
+        hold_alt   = false;
+        hold_rsum1 = false;
+        hold_rpin1 = false;
+        if(hold_sus||hold_sum){
+          register_code(KC_LSFT);
         }
+        tap_timer = timer_read();
+      } else {
+        unregister_code(KC_LSFT);
+        if(!(hold_sus||hold_sum)||timer_elapsed(tap_timer) < 200){
+          tap_code(KC_Z);
+        }
+      }
       return false;
       break;
     case NN_RPIN1:
-       if (record->event.pressed) {
+      if (record->event.pressed) {
         hold_rpin1 = true;
         layer_on(_LOWER);
         tap_timer = timer_read();
-       } else {
+      } else {
         layer_off(_LOWER);
         if (hold_rpin1 && timer_elapsed(tap_timer) < 200) {
           tap_code(KC_SLSH);
         }
         hold_rpin1 = false;
-       }
+      }
       return false;
       break;
     case NN_ENT:
-       if (record->event.pressed) {
+      if (record->event.pressed) {
         hold_rsum1 = true;
         tap_timer = timer_read();
         register_code(KC_RSFT);
-       } else {
+      } else {
         unregister_code(KC_RSFT);
         if (hold_rsum1 && timer_elapsed(tap_timer) < 180) {
           tap_code(KC_ENT);
         }
         hold_rsum1 = false;
-       }
+      }
       return false;
       break;
     case LCTL_T(KC_A):
-       hold_esc = false;
-       if (record->event.pressed) {
+      hold_esc = false;
+      if (record->event.pressed) {
         hold_ctl = true;
-       } else {
+      } else {
         hold_ctl = false;
-       }
+      }
       return true;
       break;
     case RCTL_T(KC_SPC):
