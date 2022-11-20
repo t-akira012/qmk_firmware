@@ -85,6 +85,7 @@ static bool presscheck_esc  = false;
 static bool hold_lsum1      = false;
 static bool hold_lsum2      = false;
 static bool lang1_on        = false;
+static bool bspc_on         = true;
 static uint16_t tap_timer;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
@@ -94,16 +95,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
 
   // emacs like keybind
+  if ( bspc_on ) {
+    if ( !(keycode == KC_H && keycode == KC_BSPC) ) {
+      unregister_code(KC_BSPACE);
+      bspc_on = false;
+    }
+  }
   if ( hold_lsum1 ) {
     // CTL + H to absolute BackSpace
     if (keycode == KC_H) {
       if(record->event.pressed) {
+        bspc_on = true;
         unregister_code(KC_LCTRL);
         unregister_code(KC_RCTRL);
         register_code(KC_BSPACE);
         return false;
       }else{
         unregister_code(KC_BSPACE);
+        bspc_on = false;
         return false;
       }
     }
