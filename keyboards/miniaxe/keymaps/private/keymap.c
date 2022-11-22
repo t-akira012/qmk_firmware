@@ -84,6 +84,8 @@ static bool presscheck_ln1  = false;
 static bool presscheck_esc  = false;
 static bool hold_lsum1      = false;
 static bool hold_lsum2      = false;
+static bool pressed_sft     = false;
+static bool pressed_gui     = false;
 static bool lang1_on        = false;
 static bool bspc_on         = true;
 static uint16_t tap_timer;
@@ -101,7 +103,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       bspc_on = false;
     }
   }
-  if ( hold_lsum1 ) {
+  if ( hold_lsum1 && !(pressed_gui || pressed_sft) ) {
     // lsum1 押下中なら ctrl on にする
     if (keycode && record->event.pressed) {
       register_code(KC_RCTL);
@@ -205,10 +207,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         presscheck_ent = false;
         presscheck_ln1 = false;
         if(hold_lsum2||hold_lsum1){
+          pressed_sft = true;
           register_code(KC_LSFT);
         }
         tap_timer = timer_read();
       } else {
+        pressed_sft = false;
         unregister_code(KC_LSFT);
         if(!(hold_lsum2||hold_lsum1)||timer_elapsed(tap_timer) < 200){
           tap_code(KC_Z);
@@ -237,8 +241,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         presscheck_ent = true;
         tap_timer = timer_read();
+        pressed_sft = true;
         register_code(KC_RSFT);
       } else {
+        pressed_sft = false;
         unregister_code(KC_RSFT);
         if (presscheck_ent && timer_elapsed(tap_timer) < 180) {
           tap_code(KC_ENT);
@@ -252,6 +258,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       presscheck_ent = false;
       presscheck_ln1 = false;
       if (record->event.pressed) {
+        hold_lsum1 = true;
         hold_lsum1 = true;
       } else {
         hold_lsum1 = false;
@@ -280,6 +287,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         presscheck_esc = true;
         hold_lsum2 = true;
+        pressed_gui = true;
         tap_code(KC_LANG2);
         register_code(KC_LEFT_GUI);
         tap_timer = timer_read();
@@ -289,6 +297,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           tap_code(KC_ESC);
         }
         presscheck_esc = false;
+        pressed_gui = false;
         hold_lsum2 = false;
         lang1_on = false;
       }
