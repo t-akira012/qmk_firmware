@@ -82,6 +82,7 @@ static bool presscheck_low  = false;
 static bool presscheck_ent  = false;
 static bool presscheck_ln1  = false;
 static bool presscheck_esc  = false;
+static bool hold_rsum1      = false;
 static bool hold_lsum1      = false;
 static bool hold_lsum2      = false;
 static bool pressed_sft     = false;
@@ -188,13 +189,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         presscheck_esc = false;
         presscheck_ent = false;
         presscheck_ln1 = false;
-        if(hold_lsum2||hold_lsum1){
+        if(hold_lsum2||hold_lsum1||hold_rsum1){
           register_code(KC_LCTL);
         }
         tap_timer = timer_read();
       } else {
         unregister_code(KC_LCTL);
-        if(!(hold_lsum2||hold_lsum1)||timer_elapsed(tap_timer) < 200){
+        if(!(hold_lsum2||hold_lsum1||hold_rsum1)||timer_elapsed(tap_timer) < 200){
           tap_code(KC_A);
         }
       }
@@ -239,6 +240,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case NN_RSUM1:
       if (record->event.pressed) {
+        hold_rsum1 = true;
         presscheck_ent = true;
         tap_timer = timer_read();
         pressed_sft = true;
@@ -250,6 +252,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           tap_code(KC_ENT);
         }
         presscheck_ent = false;
+        hold_rsum1 = false;
       }
       return false;
       break;
