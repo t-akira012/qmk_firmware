@@ -82,7 +82,7 @@ static bool presscheck_low  = false;
 static bool presscheck_ent  = false;
 static bool presscheck_ln1  = false;
 static bool presscheck_esc  = false;
-static bool presscheck_vsft = false;
+static bool presscheck_z    = false;
 static bool hold_rsum1      = false;
 static bool hold_lsum1      = false;
 static bool hold_lsum2      = false;
@@ -208,7 +208,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         presscheck_esc = false;
         presscheck_ent = false;
         presscheck_ln1 = false;
-        presscheck_vsft = true;
+        presscheck_z = true;
         if(hold_lsum2||hold_lsum1){
           pressed_sft = true;
           register_code(KC_LSFT);
@@ -217,10 +217,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         pressed_sft = false;
         unregister_code(KC_LSFT);
-        if(!(hold_lsum2||hold_lsum1)||timer_elapsed(tap_timer) < 200){
+        if(!(hold_lsum2||hold_lsum1||presscheck_z)||timer_elapsed(tap_timer) < 200){
           tap_code(KC_Z);
         }
-        presscheck_vsft = false;
+        presscheck_z = false;
       }
       return false;
       break;
@@ -252,7 +252,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         pressed_sft = false;
         unregister_code(KC_RSFT);
         if (presscheck_ent && timer_elapsed(tap_timer) < 180) {
-          if (presscheck_vsft){
+          if (presscheck_z){
             register_code(KC_LSFT);
           }
           tap_code(KC_ENT);
@@ -349,7 +349,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
       break;
     default:
-      presscheck_vsft  = false;
+      presscheck_z     = false;
       presscheck_esc   = false;
       presscheck_ln1   = false;
       presscheck_ent   = false;
