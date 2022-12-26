@@ -28,6 +28,7 @@ enum custom_keycodes {
   LOWER,
   RAISE,
   ADJUST,
+  FKEY,
   NN_RSUM1,
   NN_RSUM2,
   NN_LSUM2,
@@ -40,10 +41,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty */
 [_QWERTY] = LAYOUT_split_3x5_3(
-      KC_Q,           KC_W,  KC_E,      KC_R,            KC_T,               KC_Y,     KC_U,         KC_I,    KC_O,    KC_P,
-      KC_A,           KC_S,  KC_D,      KC_F,            KC_G,               KC_H,     KC_J,         KC_K,    KC_L,    LT(3,KC_SCLN),
-      KC_Z,           KC_X,  KC_C,      KC_V,            KC_B,               KC_N,     KC_M,         KC_COMM, KC_DOT,  NN_RPIN1,
-                             KC_LALT,   NN_LSUM2,        RCTL_T(KC_SPC),     NN_RSUM1, NN_RSUM2, KC_DEL
+      KC_Q,         KC_W,  KC_E,      KC_R,       KC_T,             KC_Y,     KC_U,      KC_I,    KC_O,    KC_P,
+      LT(3,KC_A),   KC_S,  KC_D,      KC_F,       KC_G,             KC_H,     KC_J,      KC_K,    KC_L,    LT(3,KC_SCLN),
+      KC_Z,         KC_X,  KC_C,      KC_V,       KC_B,             KC_N,     KC_M,      KC_COMM, KC_DOT,  NN_RPIN1,
+                           KC_LALT,   NN_LSUM2,   RCTL_T(KC_SPC),   NN_RSUM1, NN_RSUM2,  LT(4,KC_DEL)
 ),
 
 /* Lower */
@@ -69,12 +70,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_LBRC,      KC_RBRC, KC_GRV,  KC_TILD,   KC_PIPE,       KC_UNDS, KC_PLUS, KC_LT,   KC_GT,   KC_NO,
                              EMOJI,   KC_TRNS,   KC_TRNS,       KC_NO,   KC_TRNS, KC_TRNS
 ),
+
 /* Adjust (Lower + Raise) */
 [_ADJUST] =  LAYOUT_split_3x5_3(
-  KC_F1,           KC_F2,   KC_F3,   KC_F4,   KC_F5,        KC_NO,   KC_UP,   KC_NO,   KC_NO,   KC_NO,
-  LCTL_T(KC_F6),   KC_F7,   KC_F8,   KC_F9,   KC_F10,       KC_LEFT, KC_DOWN, KC_RGHT, KC_NO,   KC_NO,
-  LSFT_T(KC_F11),  KC_F12,  _______, _______, _______,      KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-                            EMOJI,   KC_TRNS, KC_TRNS,      KC_ENT,  KC_TRNS, KC_TRNS
+      KC_NO,     KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,   KC_UP,   KC_NO,   KC_NO,   KC_NO,
+      KC_LCTL,   KC_NO,   KC_LEFT, KC_DOWN, KC_RGHT,    KC_LEFT, KC_DOWN, KC_RGHT, KC_NO,   KC_NO,
+      KC_LSFT,   KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+                          EMOJI,   KC_TRNS, KC_LCTL,    KC_LSFT, KC_TRNS, KC_TRNS
+)
+/* F Key */
+[_FKEY] =  LAYOUT_split_3x5_3(
+      KC_F1,     KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_F6,    KC_F7,   KC_F8,   KC_F9,   KC_F10,
+      KC_F11,    KC_F12,  KC_NO,   KC_NO,   KC_NO,      KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,
+      KC_LSFT,   KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,
+                          EMOJI,   KC_TRNS, KC_LCTL,    KC_LSFT,  KC_TRNS, KC_TRNS
 )
 };
 
