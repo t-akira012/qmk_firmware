@@ -74,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Adjust (Lower + Raise) */
 [_ADJUST] =  LAYOUT_split_3x5_3(
-      KC_NO,     KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,   KC_UP,   KC_NO,   KC_NO,   KC_NO,
+      KC_NO,     KC_NO,   KC_NO,   KC_UP,   KC_NO,      KC_NO,   KC_UP,   KC_NO,   KC_NO,   KC_NO,
       KC_LCTL,   KC_NO,   KC_LEFT, KC_DOWN, KC_RGHT,    KC_LEFT, KC_DOWN, KC_RGHT, KC_NO,   KC_NO,
       KC_LSFT,   KC_NO,   KC_NO,   KC_NO,   KC_NO,      KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
                           EMOJI,   KC_TRNS, KC_LCTL,    KC_LSFT, KC_TRNS, KC_TRNS
